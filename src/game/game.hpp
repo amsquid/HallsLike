@@ -42,6 +42,8 @@ namespace hallslike {
 
 			sf::Vector3f mulVector3(sf::Vector3f first, float second);
 
+			sf::Vector3f centerQuad(sf::Vector3f positions[4]);
+
 			float distanceFrom(sf::Vector3f origin, sf::Vector3f other);
 
 			sf::Vector3f rotateWithCamera(sf::Vector3f position);

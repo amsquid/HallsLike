@@ -116,6 +116,16 @@ sf::Vector3i hallslike::Game::as3i(sf::Vector3f position) {
 	);
 }
 
+// Center of Quad
+sf::Vector3f hallslike::Game::centerQuad(sf::Vector3f positions[4]) {
+	return sf::Vector3f(
+		(positions[0].x + positions[1].x + positions[2].x + positions[3].x) / 4,
+		(positions[0].y + positions[1].y + positions[2].y + positions[3].y) / 4,
+		(positions[0].z + positions[1].z + positions[2].z + positions[3].z) / 4
+	);
+}
+
+
 // Inside Screen
 bool hallslike::Game::insideScreen(float x, float y) {
 	return 

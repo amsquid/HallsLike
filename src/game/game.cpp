@@ -52,6 +52,20 @@ void hallslike::Game::startGame() {
 
 	// Creating test planes
 	logger.print("Creating test plane(s)\n");
+
+	planes.push_back(Quad(
+		sf::Vector3f(-2.0f, 0.0f, -3.0f),
+		sf::Vector3f(1.0f,  0.0f, -1.0f),
+		sf::Vector3f(1.0f,  0.0f,  1.0f),
+		sf::Vector3f(-2.0f, 0.0f,  3.0f)
+	));
+
+	planes.push_back(Quad(
+		sf::Vector3f(5.0f, 0.0f, -5.0f),
+		sf::Vector3f(1.0f,  0.0f, -1.0f),
+		sf::Vector3f(1.0f,  0.0f,  1.0f),
+		sf::Vector3f(5.0f, 0.0f,  3.0f)
+	));
 	
 
 	// Starting game loop

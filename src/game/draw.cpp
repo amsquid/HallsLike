@@ -14,14 +14,15 @@
 #include <functional>
 #include <map>
 #include <string>
+#include <utility>
 #include <vector>
 
 void hallslike::Game::draw() {
 	// Drawing planes
 	sf::VertexArray vertices(sf::Quads, planes.size() * 4);
 
-	std::vector<hallslike::Quad>::iterator planeIt;
-	std::map<float, hallslike::Quad, std::less<float>> quadsSorted;
+	std::vector<Quad>::iterator planeIt;
+	std::map<float, Quad, std::less<float>> quadsSorted;
 
 	window.clear(sf::Color::Black);
 
@@ -30,7 +31,20 @@ void hallslike::Game::draw() {
 	std::map<float, Quad, std::greater<float>> offQuads;
 
 	for(planeIt = planes.begin(); planeIt != planes.end(); planeIt++) {
-		
+		// Setting quad corners
+		Quad offQuad = Quad();
+		for(int x = 0; x < 4; x++) offQuad.position[x] = addVector3(planeIt->position[x], mulVector3(camera.position, -1));
+
+		// Getting depth info		
+		sf::Vector3f center = centerQuad(offQuad.position);
+
+		float depth = calculateDepthForSorting(camera.position, center, camera.rotation);
+
+		logger.print(center.x);
+		logger.print("\n");
+	
+		// Putting in map
+		offQuads.insert(std::make_pair(depth, offQuad));
 	}
 
 	std::map<float, Quad>::iterator it;
@@ -49,17 +63,20 @@ void hallslike::Game::draw() {
 		sf::Vector2f proj4 = project(rot4, 0.0f);
 
 		// Drawing coordinates
-		float x1Draw = ((float)  window.getSize().x / 2) + (proj1.x * 100.0f);
-		float y1Draw = ((float) window.getSize().y / 2) + (proj1.y * 100.0f);
+		float widthMul = (float) window.getSize().x * .1f;
+		float heightMul = (float) window.getSize().y * .1f;
 
-		float x2Draw = ((float) window.getSize().x / 2) + (proj2.x * 100.0f);
-		float y2Draw = ((float) window.getSize().y / 2) + (proj2.y * 100.0f);
+		float x1Draw = ((float)  window.getSize().x / 2) + (proj1.x * heightMul);
+		float y1Draw = ((float) window.getSize().y / 2) + (proj1.y * widthMul);
 
-		float x3Draw = ((float) window.getSize().x / 2) + (proj3.x * 100.0f);
-		float y3Draw = ((float) window.getSize().y / 2) + (proj3.y * 100.0f);
+		float x2Draw = ((float) window.getSize().x / 2) + (proj2.x * heightMul);
+		float y2Draw = ((float) window.getSize().y / 2) + (proj2.y * widthMul);
 
-		float x4Draw = ((float) window.getSize().x / 2) + (proj4.x * 100.0f);
-		float y4Draw = ((float) window.getSize().y / 2) + (proj4.y * 100.0f);
+		float x3Draw = ((float) window.getSize().x / 2) + (proj3.x * heightMul);
+		float y3Draw = ((float) window.getSize().y / 2) + (proj3.y * widthMul);
+
+		float x4Draw = ((float) window.getSize().x / 2) + (proj4.x * heightMul);
+		float y4Draw = ((float) window.getSize().y / 2) + (proj4.y * widthMul);
 
 		if(
 			(
@@ -79,15 +96,15 @@ void hallslike::Game::draw() {
 		}
 
 		// Adding to vertecies
-		vertices[(i + 0) * 4 + 0].position = sf::Vector2f(x1Draw, y1Draw);
-		vertices[(i + 0) * 4 + 1].position = sf::Vector2f(x2Draw, y2Draw);
-		vertices[(i + 0) * 4 + 2].position = sf::Vector2f(x3Draw, y3Draw);
-		vertices[(i + 0) * 4 + 3].position = sf::Vector2f(x4Draw, y4Draw);
+		vertices[i * 4 + 0].position = sf::Vector2f(x1Draw, y1Draw);
+		vertices[i * 4 + 1].position = sf::Vector2f(x2Draw, y2Draw);
+		vertices[i * 4 + 2].position = sf::Vector2f(x3Draw, y3Draw);
+		vertices[i * 4 + 3].position = sf::Vector2f(x4Draw, y4Draw);
 
-		vertices[(i + 0) * 4 + 0].color = sf::Color::Magenta;
-		vertices[(i + 0) * 4 + 1].color = sf::Color::Green;
-		vertices[(i + 0) * 4 + 2].color = sf::Color::White;
-		vertices[(i + 0) * 4 + 3].color = sf::Color::Yellow;
+		vertices[i * 4 + 0].color = sf::Color::Magenta;
+		vertices[i * 4 + 1].color = sf::Color::Green;
+		vertices[i * 4 + 2].color = sf::Color::White;
+		vertices[i * 4 + 3].color = sf::Color::Yellow;
 
 		// Adding index
 		i++;
