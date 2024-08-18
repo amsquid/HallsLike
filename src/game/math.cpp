@@ -2,7 +2,6 @@
 #include <SFML/System/Vector3.hpp>
 #include <algorithm>
 #include <cmath>
-#include <vector>
 
 // Distance
 float hallslike::Game::distanceFrom(sf::Vector3f origin, sf::Vector3f other) {
@@ -13,14 +12,14 @@ float hallslike::Game::distanceFrom(sf::Vector3f origin, sf::Vector3f other) {
 	return std::sqrt(dx * dx + dy * dy + dz * dz);
 }
 
-float hallslike::Game::calculateDepthForSorting(const sf::Vector3f cameraPos, const sf::Vector3f blockPos, const sf::Vector2f cameraRotation) {
+float hallslike::Game::calculateDepthForSorting(const sf::Vector3f cameraPos, const sf::Vector3f planePos, const sf::Vector2f cameraRotation) {
 	sf::Vector3f cameraDir(
 		std::cos(cameraRotation.y) * std::cos(cameraRotation.x),
 		std::sin(cameraRotation.x),
 		std::sin(cameraRotation.y) * std::cos(cameraRotation.x)
 	);
 
-	sf::Vector3f relativePos = blockPos - cameraPos;
+	sf::Vector3f relativePos = planePos - cameraPos;
 
 	return (relativePos.x * cameraDir.x) +
 		   (relativePos.y * cameraDir.y) +
@@ -29,7 +28,7 @@ float hallslike::Game::calculateDepthForSorting(const sf::Vector3f cameraPos, co
 
 // Projections
 sf::Vector2f hallslike::Game::project(sf::Vector3f position, float distance) {
-	float aspect = window.getSize().x / window.getSize().y;
+	float aspect = (float) window.getSize().x / window.getSize().y;
 
 	float z = std::max(position.z, camera.near);
 
@@ -40,7 +39,7 @@ sf::Vector2f hallslike::Game::project(sf::Vector3f position, float distance) {
 }
 
 sf::Vector2f hallslike::Game::project(sf::Vector3i position, float distance) {
-	float aspect = window.getSize().x / window.getSize().y;
+	float aspect = (float) window.getSize().x / window.getSize().y;
 
 	float z = std::max((float) position.z, camera.near);
 
@@ -122,9 +121,4 @@ bool hallslike::Game::insideScreen(float x, float y) {
 	return 
 		x < window.getSize().x && x > 0 &&
 		y < window.getSize().y && y > 0;
-}
-
-// Block At
-bool hallslike::Game::blockAt(sf::Vector3i position) {
-	return blocks.find(position) != blocks.end();
 }

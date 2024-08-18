@@ -50,20 +50,9 @@ void hallslike::Game::startGame() {
 	logger.print("Creating player\n");
 	player = hallslike::Player();
 
-	// Creating test blocks
-	logger.print("Creating test block(s)\n");
-	//blocks.push_back(Block(0, 0, 0));
-	for(int z = -10; z < 10; z++) {
-		for (int x = -10; x < 10; x++) {
-			int currY = std::sin(x * 3.14f) * 5.0f;
-
-			while(currY < 5) {
-				blocks[sf::Vector3i(x, currY, z)] = Block();
-				
-				currY++;
-			}
-		}
-	}
+	// Creating test planes
+	logger.print("Creating test plane(s)\n");
+	
 
 	// Starting game loop
 	logger.print("Starting game loop\n");

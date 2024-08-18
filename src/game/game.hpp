@@ -1,9 +1,10 @@
-#include "../blocks/block.hpp"
 #include "../entity/entity.hpp"
 
 #include "../logger.hpp"
 
 #include "../vector.hpp"
+
+#include "quad.hpp"
 
 #include <SFML/Graphics/Font.hpp>
 #include <SFML/Graphics/RenderWindow.hpp>
@@ -11,7 +12,6 @@
 #include <SFML/System/Vector3.hpp>
 #include <SFML/Window.hpp>
 
-#include <unordered_map>
 #include <vector>
 
 namespace hallslike {
@@ -22,7 +22,7 @@ namespace hallslike {
 
 			sf::Font mainFont;
 
-			std::unordered_map<sf::Vector3i, hallslike::Block, blocklke::Vector3iHash> blocks;
+			std::vector<hallslike::Quad> planes;
 			std::vector<hallslike::Entity> entities;
 			std::vector<bool> keysDown;
 
@@ -49,11 +49,9 @@ namespace hallslike {
 			sf::Vector2f project(sf::Vector3f position, float distance);
 			sf::Vector2f project(sf::Vector3i position, float distance);
 
-			float calculateDepthForSorting(const sf::Vector3f cameraPos, const sf::Vector3f blockPos, const sf::Vector2f cameraRotation);
+			float calculateDepthForSorting(const sf::Vector3f cameraPos, const sf::Vector3f planePos, const sf::Vector2f cameraRotation);
 
 			bool insideScreen(float x, float y);
-
-			bool blockAt(sf::Vector3i position);
 
 			sf::Vector3i as3i(sf::Vector3f position);
 
